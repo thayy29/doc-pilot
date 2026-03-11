@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100%" height="100%"
+     viewBox="0 0 1600 1080"
+     preserveAspectRatio="xMidYMid meet">
+  <rect x="0" y="0" width="1600" height="1080" fill="#F2F2F2"/>
+
+  <!-- Topbar -->
+  <rect x="40" y="28" width="1520" height="76" rx="16" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="72" y="74" fill="#000000" font-family="Inter, Arial" font-size="18" font-weight="900">DocPilot</text>
+  <rect x="160" y="56" width="8" height="20" rx="4" fill="#FF5800"/>
+
+  <!-- Project selector -->
+  <rect x="210" y="48" width="420" height="40" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="230" y="74" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Projeto: Cliente X • Billing API</text>
+
+  <!-- Status -->
+  <rect x="640" y="52" width="108" height="32" rx="10" fill="#10B981" fill-opacity="0.12" stroke="#10B981" stroke-opacity="0.40"/>
+  <text x="662" y="74" fill="#065F46" font-family="Inter, Arial" font-size="10.5" font-weight="950">INDEXADO</text>
+
+  <!-- Header anchors -->
+  <rect x="770" y="48" width="90" height="40" rx="12" fill="#FF5800" fill-opacity="0.10" stroke="#FF5800" stroke-opacity="0.35"/>
+  <text x="815" y="68" text-anchor="middle" dominant-baseline="middle"
+        fill="#FF5800" font-family="Inter, Arial" font-size="11" font-weight="950">Projetos</text>
+
+  <rect x="868" y="48" width="74" height="40" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="905" y="68" text-anchor="middle" dominant-baseline="middle"
+        fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="950">Chat</text>
+
+  <rect x="950" y="48" width="110" height="40" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="1005" y="68" text-anchor="middle" dominant-baseline="middle"
+        fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="950">Gerar Docs</text>
+
+  <rect x="1068" y="48" width="84" height="40" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="1110" y="68" text-anchor="middle" dominant-baseline="middle"
+        fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="950">Fontes</text>
+
+  <!-- Primary action -->
+  <rect x="1420" y="48" width="120" height="40" rx="12" fill="#FF5800"/>
+  <text x="1480" y="68" text-anchor="middle" dominant-baseline="middle"
+        fill="#FFFFFF" font-family="Inter, Arial" font-size="12" font-weight="950">+ Novo</text>
+
+  <!-- SECTION: Projetos -->
+  <text x="40" y="150" fill="#000000" font-family="Inter, Arial" font-size="15" font-weight="900">Projetos</text>
+  <text x="40" y="174" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Escolha o projeto e gerencie importações.</text>
+  <rect x="40" y="190" width="1520" height="170" rx="16" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.10"/>
+
+  <!-- Card 1 -->
+  <rect x="70" y="220" width="440" height="110" rx="16" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="92" y="255" fill="#000000" font-family="Inter, Arial" font-size="13" font-weight="900">Cliente X • Billing API</text>
+  <text x="92" y="278" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Fonte: Confluence • 128 páginas</text>
+  <rect x="92" y="292" width="86" height="24" rx="9" fill="#10B981" fill-opacity="0.12" stroke="#10B981" stroke-opacity="0.40"/>
+  <text x="108" y="309" fill="#065F46" font-family="Inter, Arial" font-size="10.5" font-weight="950">INDEXADO</text>
+  <rect x="390" y="266" width="100" height="40" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="440" y="286" text-anchor="middle" dominant-baseline="middle"
+        fill="#000000" font-family="Inter, Arial" font-size="12" font-weight="900">Abrir</text>
+
+  <!-- Card 2 -->
+  <rect x="530" y="220" width="440" height="110" rx="16" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="552" y="255" fill="#000000" font-family="Inter, Arial" font-size="13" font-weight="900">Cliente Y • Portal Web</text>
+  <text x="552" y="278" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Fonte: Notion • 54 páginas</text>
+  <rect x="552" y="292" width="140" height="24" rx="9" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.45"/>
+  <text x="566" y="309" fill="#92400E" font-family="Inter, Arial" font-size="10.5" font-weight="950">ATUALIZAR</text>
+  <rect x="850" y="266" width="100" height="40" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="900" y="286" text-anchor="middle" dominant-baseline="middle"
+        fill="#000000" font-family="Inter, Arial" font-size="12" font-weight="900">Abrir</text>
+
+  <!-- Import card -->
+  <rect x="990" y="220" width="540" height="110" rx="16" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="1012" y="255" fill="#000000" font-family="Inter, Arial" font-size="13" font-weight="900">Importar documentação</text>
+  <text x="1012" y="278" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Aceita: MD, HTML, TXT, OpenAPI, Postman, CSV</text>
+  <rect x="1012" y="266" width="120" height="40" rx="12" fill="#FF5800"/>
+  <text x="1072" y="286" text-anchor="middle" dominant-baseline="middle"
+        fill="#FFFFFF" font-family="Inter, Arial" font-size="12" font-weight="950">Upload</text>
+  <rect x="1142" y="266" width="160" height="40" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="1222" y="286" text-anchor="middle" dominant-baseline="middle"
+        fill="#000000" font-family="Inter, Arial" font-size="12" font-weight="900">Conectar Wiki</text>
+
+  <!-- SECTION: Chat -->
+  <text x="40" y="410" fill="#000000" font-family="Inter, Arial" font-size="15" font-weight="900">Chat</text>
+  <text x="40" y="434" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Pergunte e receba resposta com fontes.</text>
+
+  <rect x="40" y="450" width="1000" height="310" rx="16" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.10"/>
+  <rect x="1060" y="450" width="500" height="310" rx="16" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.10"/>
+
+  <rect x="70" y="485" width="940" height="210" rx="16" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="92" y="514" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Conversa</text>
+
+  <rect x="520" y="532" width="470" height="52" rx="14" fill="#FF5800" fill-opacity="0.10" stroke="#FF5800" stroke-opacity="0.35"/>
+  <text x="540" y="564" fill="#000000" font-family="Inter, Arial" font-size="12.5" font-weight="650">Como rodo o projeto localmente?</text>
+
+  <rect x="92" y="600" width="898" height="74" rx="14" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="112" y="630" fill="#000000" font-family="Inter, Arial" font-size="12.5" font-weight="650">Passos: Node 18+ • configurar .env • npm i • npm run dev</text>
+  <rect x="112" y="640" width="150" height="24" rx="9" fill="#3B82F6" fill-opacity="0.10" stroke="#3B82F6" stroke-opacity="0.35"/>
+  <text x="124" y="657" fill="#1D4ED8" font-family="Inter, Arial" font-size="10.5" font-weight="950">COM FONTES</text>
+
+  <rect x="70" y="710" width="780" height="40" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="92" y="736" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Pergunte algo…</text>
+  <rect x="860" y="710" width="150" height="40" rx="12" fill="#FF5800"/>
+  <text x="935" y="730" text-anchor="middle" dominant-baseline="middle"
+        fill="#FFFFFF" font-family="Inter, Arial" font-size="12" font-weight="950">Enviar</text>
+
+  <text x="1090" y="485" fill="#000000" font-family="Inter, Arial" font-size="15" font-weight="900">Fontes</text>
+  <text x="1090" y="508" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Links do conteúdo usado na resposta.</text>
+
+  <rect x="1090" y="528" width="440" height="64" rx="14" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="1112" y="556" fill="#000000" font-family="Inter, Arial" font-size="13" font-weight="900">Runbook • Setup Local</text>
+  <text x="1112" y="576" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Confluence /page/123</text>
+
+  <rect x="1090" y="602" width="440" height="64" rx="14" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="1112" y="630" fill="#000000" font-family="Inter, Arial" font-size="13" font-weight="900">Env Vars</text>
+  <text x="1112" y="650" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Confluence /page/456</text>
+
+  <rect x="1090" y="676" width="440" height="64" rx="14" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="1112" y="704" fill="#000000" font-family="Inter, Arial" font-size="13" font-weight="900">Troubleshooting</text>
+  <text x="1112" y="724" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Confluence /page/789</text>
+
+  <!-- SECTION: Gerar Docs -->
+  <text x="40" y="820" fill="#000000" font-family="Inter, Arial" font-size="15" font-weight="900">Gerar Docs</text>
+  <text x="40" y="844" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Gere um rascunho, revise e exporte.</text>
+  <rect x="40" y="860" width="1520" height="170" rx="16" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.10"/>
+
+  <rect x="70" y="892" width="360" height="110" rx="16" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="92" y="926" fill="#000000" font-family="Inter, Arial" font-size="13" font-weight="900">Runbook</text>
+  <text x="92" y="948" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Como rodar + env vars + troubleshooting</text>
+  <rect x="92" y="960" width="100" height="36" rx="12" fill="#FF5800"/>
+  <text x="142" y="978" text-anchor="middle" dominant-baseline="middle"
+        fill="#FFFFFF" font-family="Inter, Arial" font-size="12" font-weight="950">Gerar</text>
+
+  <rect x="450" y="892" width="360" height="110" rx="16" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="472" y="926" fill="#000000" font-family="Inter, Arial" font-size="13" font-weight="900">Arquitetura</text>
+  <text x="472" y="948" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">Componentes + integrações + visão geral</text>
+  <rect x="472" y="960" width="100" height="36" rx="12" fill="#FF5800"/>
+  <text x="522" y="978" text-anchor="middle" dominant-baseline="middle"
+        fill="#FFFFFF" font-family="Inter, Arial" font-size="12" font-weight="950">Gerar</text>
+
+  <rect x="830" y="892" width="700" height="110" rx="16" fill="#000000" fill-opacity="0.03" stroke="#000000" stroke-opacity="0.10"/>
+  <text x="852" y="926" fill="#000000" font-family="Inter, Arial" font-size="13" font-weight="900">Editor</text>
+  <text x="852" y="948" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650">O texto gerado aparece aqui para revisão.</text>
+  <rect x="852" y="962" width="460" height="36" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="874" y="986" fill="#333333" font-family="Inter, Arial" font-size="11" font-weight="650"># Runbook (rascunho)…</text>
+  <rect x="1322" y="962" width="96" height="36" rx="12" fill="#FFFFFF" stroke="#000000" stroke-opacity="0.12"/>
+  <text x="1370" y="980" text-anchor="middle" dominant-baseline="middle"
+        fill="#000000" font-family="Inter, Arial" font-size="12" font-weight="900">Exportar</text>
+  <rect x="1426" y="962" width="104" height="36" rx="12" fill="#FF5800"/>
+  <text x="1478" y="980" text-anchor="middle" dominant-baseline="middle"
+        fill="#FFFFFF" font-family="Inter, Arial" font-size="12" font-weight="950">Salvar</text>
+</svg>

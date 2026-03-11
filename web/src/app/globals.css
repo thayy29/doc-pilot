@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --brand: #ff5800;
+  --brand-50: #fff2e9;
+  --brand-100: #ffe1d0;
+  --brand-200: #ffc4a1;
+  --brand-300: #ffa06a;
+  --brand-400: #ff7b36;
+  --brand-500: #ff5800;
+  /* Avanade */
+  --brand-600: #e64f00;
+  --brand-700: #bf4100;
+  --brand-800: #993500;
+  --brand-900: #7a2a00;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --brand: #ff5800;
+  --brand-50: #fff2e9;
+  --brand-100: #ffe1d0;
+  --brand-200: #ffc4a1;
+  --brand-300: #ffa06a;
+  --brand-400: #ff7b36;
+  --brand-500: #ff5800;
+  /* Avanade */
+  --brand-600: #e64f00;
+  --brand-700: #bf4100;
+  --brand-800: #993500;
+  --brand-900: #7a2a00;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+  /* alias útil */
+  --color-brand: var(--brand-500);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
