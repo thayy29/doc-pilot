@@ -20,13 +20,13 @@ export default function ProjectCard({ title,
   badgeLabel,
   className = "", }: Props) {
   return (
-    <Card variant="subtle" className={`min-h-[110px] p-5 ${className}`}>
+    <Card variant="subtle" className={`min-h-docpilot-110 p-docpilot-5 ${className}`}>
       <div className="flex h-full flex-col justify-between">
         <div>
-          <div className="text-[13px] font-black text-black dark:text-white">
+          <div className="text-docpilot-13 font-black text-black dark:text-white">
             {title}
           </div>
-          <div className="mt-1 text-[11px] font-medium text-[#333333] dark:text-white/70">
+          <div className="mt-docpilot-1 text-docpilot-11 font-medium text-[#333333] dark:text-white/70">
             Fonte: {source} • {pages} páginas
           </div>
         </div>

@@ -9,7 +9,7 @@ import ProjectCard from "@/components/ProjectCard";
 export default function Home() {
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
-      <main className="mx-auto w-full max-w-[1600px] px-[40px] py-12">
+      <main className="mx-auto w-full max-w-docpilot px-docpilot-x py-docpilot-y">
         <Topbar
           projectLabel="Projeto: Cliente X * Billing API"
           statusLabel="Indexado"

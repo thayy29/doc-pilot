@@ -1,5 +1,5 @@
 export const containerStyles = [
-  "h-[76px] w-full",
+  "h-docpilot-76 w-full",
   "rounded-2xl border",
   "bg-white border-black/10",
   "dark:bg-[#111418] dark:border-white/10",
@@ -8,18 +8,15 @@ export const containerStyles = [
 ].join(" ");
 
 export const logoTextStyles = [
-  "text-[18px] font-black",
+  "text-docpilot-18 font-black",
   "text-black dark:text-white",
   "leading-none",
 ].join(" ");
 
-export const logoBarStyles = [
-  "h-5 w-2 rounded",
-  "bg-brand-500",
-].join(" ");
+export const logoBarStyles = ["h-5 w-2 rounded", "bg-brand-500"].join(" ");
 
 export const projectSelectorStyles = [
-  "h-10 w-[420px]",
+  "h-docpilot-10 w-docpilot-420",
   "rounded-xl border",
   "bg-white border-black/[.12]",
   "dark:bg-[#111418] dark:border-white/[.14]",
@@ -28,7 +25,7 @@ export const projectSelectorStyles = [
 ].join(" ");
 
 export const projectSelectorTextStyles = [
-  "text-[11px] font-medium",
+  "text-docpilot-11 font-medium",
   "text-[#333333] dark:text-white/70",
   "truncate",
 ].join(" ");
@@ -36,7 +33,7 @@ export const projectSelectorTextStyles = [
 export const anchorBaseStyles = [
   "h-10 rounded-xl border",
   "px-5",
-  "text-[11px] font-black",
+  "text-docpilot-11 font-black",
   "inline-flex items-center justify-center",
   "transition-colors",
   "select-none",
@@ -53,7 +50,7 @@ export const anchorActiveStyles = [
 ].join(" ");
 
 export const statusStyles = [
-  "h-8 w-[108px] rounded-[10px] border",
+  "h-docpilot-8 w-docpilot-108 rounded-docpilot-10 border",
   "bg-[#10B981]/[0.12] border-[#10B981]/[0.40] text-[#065F46]",
   "dark:bg-[#10B981]/[0.16] dark:border-[#10B981]/[0.55] dark:text-[#A7F3D0]",
   "inline-flex items-center justify-center",
@@ -62,9 +59,9 @@ export const statusStyles = [
 ].join(" ");
 
 export const ctaStyles = [
-  "h-10 w-[120px] rounded-xl",
+  "h-docpilot-10 w-docpilot-120 rounded-xl",
   "bg-brand-500",
-  "text-[12px] font-black",
+  "text-docpilot-12 font-black",
   "text-white dark:text-[#111418]",
   "inline-flex items-center justify-center",
 ].join(" ");
