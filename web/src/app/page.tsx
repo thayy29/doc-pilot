@@ -5,6 +5,7 @@ import SectionHeader from "@/components/SectionHeader";
 import Topbar from "@/components/Topbar";
 import ImportDocsCard from "@/components/ImportDocsCard";
 import ProjectCard from "@/components/ProjectCard";
+import ChatDemo from "@/components/ChatDemo";
 
 export default function Home() {
   return (
@@ -47,6 +48,7 @@ export default function Home() {
             <ImportDocsCard />
           </div>
         </Card>
+        <ChatDemo />
       </main>
     </div >
   );
