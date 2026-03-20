@@ -6,24 +6,24 @@ type Props = {
   className?: string;
 }
 
-export default function ImportDocsCard({ onUploadHref, className = "" }: Props) {
+export default function ImportDocsCard({ className = "" }: Props) {
   return (
     <Card
       variant="subtle"
-      className={`min-h-docpilot-110 w-full p-docpilot-5 ${className}`}
+      className={`flex-1 min-w-0 h-28 p-5 ${className}`}
     >
-      <div className="flex h-full flex-nowrap items-center justify-between gap-6">
+      <div className="flex h-full flex-nowrap items-center justify-between gap-4">
         <div className="min-w-0">
-          <div className="text-docpilot-13 font-black text-black dark:text-white">
+          <div className="text-sm font-black text-foreground">
             Importar documentação
           </div>
-          <div className="mt-docpilot-1 text-docpilot-11 font-medium text-[#333333] dark:text-white/70">
+          <div className="mt-1 text-xs font-semibold text-foreground-muted">
             Aceita: MD, HTML, TXT, OpenAPI, Postman, CSV
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-3">
-          <Button variant="primary" className="w-docpilot-120">Upload</Button>
-          <Button variant="ghost" className="w-docpilot-160" disabled>Conectar Wiki</Button>
+          <Button variant="primary" className="w-28">Upload</Button>
+          <Button variant="ghost" className="w-40" disabled>Conectar Wiki</Button>
         </div>
       </div>
     </Card>

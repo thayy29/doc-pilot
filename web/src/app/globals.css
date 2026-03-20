@@ -1,61 +1,121 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --brand: #ff5800;
-  --brand-50: #fff2e9;
-  --brand-100: #ffe1d0;
-  --brand-200: #ffc4a1;
-  --brand-300: #ffa06a;
-  --brand-400: #ff7b36;
-  --brand-500: #ff5800;
-  /* Avanade */
-  --brand-600: #e64f00;
-  --brand-700: #bf4100;
-  --brand-800: #993500;
-  --brand-900: #7a2a00;
+  /* Background */
+  --background: #F2F2F2;
+  --surface: #FFFFFF;
+  --subtle: rgba(0, 0, 0, 0.03);
+  
+  /* Foreground */
+  --foreground: #000000;
+  --foreground-muted: #333333;
+  
+  /* Border */
+  --border: rgba(0, 0, 0, 0.10);
+  --border-strong: rgba(0, 0, 0, 0.12);
+  
+  /* Brand - Avanade Orange */
+  --brand: #FF5800;
+  --brand-hover: #E65000;
+  --brand-text: #FFFFFF;
+  --brand-subtle: rgba(255, 88, 0, 0.10);
+  --brand-subtle-border: rgba(255, 88, 0, 0.35);
+  
+  /* Status */
+  --success: #10B981;
+  --success-subtle: rgba(16, 185, 129, 0.12);
+  --success-border: rgba(16, 185, 129, 0.40);
+  --success-text: #065F46;
+  
+  --warning: #F59E0B;
+  --warning-subtle: rgba(245, 158, 11, 0.14);
+  --warning-border: rgba(245, 158, 11, 0.45);
+  --warning-text: #92400E;
+  
+  --info: #3B82F6;
+  --info-subtle: rgba(59, 130, 246, 0.10);
+  --info-border: rgba(59, 130, 246, 0.35);
+  --info-text: #1D4ED8;
 }
 
 .dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --brand: #ff5800;
-  --brand-50: #fff2e9;
-  --brand-100: #ffe1d0;
-  --brand-200: #ffc4a1;
-  --brand-300: #ffa06a;
-  --brand-400: #ff7b36;
-  --brand-500: #ff5800;
-  /* Avanade */
-  --brand-600: #e64f00;
-  --brand-700: #bf4100;
-  --brand-800: #993500;
-  --brand-900: #7a2a00;
+  /* Background */
+  --background: #0B0D10;
+  --surface: #111418;
+  --subtle: rgba(255, 255, 255, 0.04);
+  
+  /* Foreground */
+  --foreground: #FFFFFF;
+  --foreground-muted: rgba(255, 255, 255, 0.72);
+  
+  /* Border */
+  --border: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  
+  /* Brand - Avanade Orange */
+  --brand: #FF5800;
+  --brand-hover: #E65000;
+  --brand-text: #111418;
+  --brand-subtle: rgba(255, 88, 0, 0.18);
+  --brand-subtle-border: rgba(255, 88, 0, 0.60);
+  
+  /* Status */
+  --success: #10B981;
+  --success-subtle: rgba(16, 185, 129, 0.16);
+  --success-border: rgba(16, 185, 129, 0.55);
+  --success-text: #A7F3D0;
+  
+  --warning: #F59E0B;
+  --warning-subtle: rgba(245, 158, 11, 0.18);
+  --warning-border: rgba(245, 158, 11, 0.60);
+  --warning-text: #FDE68A;
+  
+  --info: #3B82F6;
+  --info-subtle: rgba(59, 130, 246, 0.16);
+  --info-border: rgba(59, 130, 246, 0.55);
+  --info-text: #BFDBFE;
 }
 
 @theme inline {
+  /* Colors */
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
   --color-foreground: var(--foreground);
-  --color-brand-50: var(--brand-50);
-  --color-brand-100: var(--brand-100);
-  --color-brand-200: var(--brand-200);
-  --color-brand-300: var(--brand-300);
-  --color-brand-400: var(--brand-400);
-  --color-brand-500: var(--brand-500);
-  --color-brand-600: var(--brand-600);
-  --color-brand-700: var(--brand-700);
-  --color-brand-800: var(--brand-800);
-  --color-brand-900: var(--brand-900);
-  /* alias útil */
-  --color-brand: var(--brand-500);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  
+  /* Brand */
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-text: var(--brand-text);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-subtle-border: var(--brand-subtle-border);
+  
+  /* Status */
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  --color-success-border: var(--success-border);
+  --color-success-text: var(--success-text);
+  
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-warning-border: var(--warning-border);
+  --color-warning-text: var(--warning-text);
+  
+  --color-info: var(--info);
+  --color-info-subtle: var(--info-subtle);
+  --color-info-border: var(--info-border);
+  --color-info-text: var(--info-text);
+  
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }

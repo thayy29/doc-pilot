@@ -1,5 +1,4 @@
 import Button from "@/components/Button";
-import Badge from "@/components/Badge";
 import Card from "@/components/Card";
 import SectionHeader from "@/components/SectionHeader";
 import Topbar from "@/components/Topbar";
@@ -9,8 +8,8 @@ import ChatDemo from "@/components/ChatDemo";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
-      <main className="mx-auto w-full max-w-docpilot px-docpilot-x py-docpilot-y">
+    <div className="min-h-screen bg-background font-sans">
+      <main className="mx-auto w-full max-w-[1600px] px-10 pt-7">
         <Topbar
           projectLabel="Projeto: Cliente X * Billing API"
           statusLabel="Indexado"

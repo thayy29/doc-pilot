@@ -1,5 +1,5 @@
 import Button from "../Button";
-import { buttonStyles, containerStyles } from "./styles";
+import { buttonStyles, containerStyles, inputStyles } from "./styles";
 
 type Props = {
   value: string;
@@ -35,6 +35,7 @@ export default function ChatInput({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         disabled={disabled}
+        className={inputStyles}
       />
       <Button
         variant="primary"

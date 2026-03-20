@@ -16,16 +16,16 @@ export default function SectionHeader({
   return (
     <div className={`flex w-full items-start justify-between gap-4 ${className}`}>
       <div className="min-w-0">
-        <h2 className="text-docpilot-15 font-black leading-docpilot-20 text-black dark:text-white">
+        <h2 className="text-base font-black leading-5 text-foreground">
           {title}
         </h2>
         {subtitle ? (
-          <p className="mt-docpilot-1 text-docpilot-11 font-medium leading-docpilot-16 text-[#333333] dark:text-white/70">
+          <p className="mt-1 text-xs font-semibold leading-4 text-foreground-muted">
             {subtitle}
           </p>
         ) : null}
       </div>
-      {right ? <div className="shrink-0 pt-docpilot-1">{right}</div> : null}
+      {right ? <div className="shrink-0">{right}</div> : null}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   ctaStyles,
 } from "./styles";
 import Link from "next/link";
+import ThemeToggle from "../ThemeToggle";
 
 type Anchor = {
   key: string;
@@ -28,41 +29,36 @@ type Props = {
 export default function Topbar({ projectLabel, statusLabel, anchors, newHref }: Props) {
   return (
     <div className={containerStyles}>
-      <div className="flex w-docpilot-138 items-center gap-docpilot-3">
+      <div className="flex items-center">
         <div className={logoTextStyles}>DocPilot</div>
-        <div className="ml-auto">
-          <div className={logoBarStyles} />
-        </div>
+        <div className={logoBarStyles} />
       </div>
-      <div className="ml-docpilot-42 flex items-center">
-        <div className="flex items-center gap-docpilot-10">
-          <div className={projectSelectorStyles}>
-            <div className={projectSelectorTextStyles}>{projectLabel}</div>
-          </div>
-          <div className={statusStyles}>{statusLabel}</div>
+      <div className="flex items-center gap-2.5">
+        <div className={projectSelectorStyles}>
+          <div className={projectSelectorTextStyles}>{projectLabel}</div>
         </div>
-        <div className="ml-docpilot-22 flex items-center gap-2">
-          {anchors.map((a) => (
-            <Link
-              key={a.key}
-              href={a.href}
-              className={[
-                anchorBaseStyles,
-                a.active ? anchorActiveStyles : anchorInactiveStyles,
-              ].join(" ")}
-            >
-              {a.label}
-            </Link>
-          ))}
-        </div>
+        <div className={statusStyles}>{statusLabel}</div>
       </div>
-      <div className="ml-auto">
+      <div className="flex items-center gap-2">
+        {anchors.map((a) => (
+          <Link
+            key={a.key}
+            href={a.href}
+            className={[
+              anchorBaseStyles,
+              a.active ? anchorActiveStyles : anchorInactiveStyles,
+            ].join(" ")}
+          >
+            {a.label}
+          </Link>
+        ))}
+      </div>
+      <div className="ml-auto flex items-center gap-3">
+        <ThemeToggle />
         <Link href={newHref} className={ctaStyles}>
           + Novo
         </Link>
       </div>
-
     </div>
-
-  )
+  );
 }

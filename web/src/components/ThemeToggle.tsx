@@ -1,33 +1,50 @@
 "use client";
 
-type Theme = "light" | "dark";
-
-function getCurrentTheme(): Theme {
-  if (typeof document === "undefined") return "light";
-  return document.documentElement.classList.contains("dark") ? "dark" : "light";
-}
-
-function applyTheme(theme: Theme) {
-  const root = document.documentElement;
-  if (theme === "dark") root.classList.add("dark");
-  else root.classList.remove("dark");
-}
+import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   function toggle() {
-    const current = getCurrentTheme();
-    const next: Theme = current === "dark" ? "light" : "dark";
-    applyTheme(next);
+    const root = document.documentElement;
+    const isDark = root.classList.contains("dark");
+    const next = isDark ? "light" : "dark";
+
+    if (next === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
     localStorage.setItem("theme", next);
   }
+
+  if (!mounted) return null;
 
   return (
     <button
       type="button"
       onClick={toggle}
-      className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-black hover:bg-black/5 dark:border-white/15 dark:bg-black dark:text-white dark:hover:bg-white/10"
+      className="h-10 w-10 rounded-full border border-border-strong bg-surface flex items-center justify-center transition-colors hover:bg-subtle"
+      aria-label="Alternar tema"
     >
-      Alternar tema
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-foreground-muted"
+      >
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
     </button>
   );
 }
