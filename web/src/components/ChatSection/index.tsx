@@ -40,7 +40,7 @@ export default function ChatSection({
   return (
     <div className={`${containerStyles} ${className}`}>
       <div className={chatPanelStyles}>
-        <ChatMessage messages={messages} className="min-h-0 flex-1 overflow-y-auto" />
+        <ChatMessage messages={messages} className="min-h-0 flex-1" />
         <div className="mt-3 shrink-0">
           <ChatInput
             value={inputValue}

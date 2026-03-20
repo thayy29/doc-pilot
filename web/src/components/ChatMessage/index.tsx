@@ -22,7 +22,7 @@ export default function ChatMessage({
       <div className="shrink-0">
         <div className={labelStyles}>Conversa</div>
       </div>
-      <div className={`${listStyles} min-h-0 flex-1 overflow-y-auto`}>
+      <div className={`${listStyles}`}>
         {messages.map((msg) => (
           <ChatBubble
             key={msg.id}

@@ -1,5 +1,5 @@
 export const cardStyles = [
-  "rounded-2xl border p-4",
+  "w-full rounded-2xl border p-3 sm:w-auto sm:p-4",
   "bg-subtle border-border",
 ].join(" ");
 

@@ -43,7 +43,7 @@ export default function ChatDemo() {
         title="Chat"
         subtitle="Pergunte e receba resposta com fontes."
       />
-      <div className="mt-3 flex min-h-0 flex-1">
+      <div className="mt-3 flex min-h-0 flex-1 overflow-hidden">
         <ChatSection
           messages={messages}
           sources={mockSources}

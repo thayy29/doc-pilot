@@ -1,9 +1,10 @@
 export const containerStyles = [
-  "h-20 w-full",
+  "w-full shrink-0",
   "rounded-2xl border border-border",
   "bg-surface",
-  "flex items-center gap-12",
-  "px-8",
+  "flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 lg:gap-8",
+  "px-3 py-2 sm:px-4 sm:py-3 md:px-6 lg:px-8",
+  "md:h-20 md:flex-nowrap md:py-0",
 ].join(" ");
 
 export const logoTextStyles = "text-lg font-black text-foreground leading-none";
@@ -11,11 +12,11 @@ export const logoTextStyles = "text-lg font-black text-foreground leading-none";
 export const logoBarStyles = "h-5 w-2 rounded bg-brand ml-4";
 
 export const projectSelectorStyles = [
-  "h-10 w-96",
+  "h-8 min-w-0 flex-1 sm:h-10 sm:max-w-64 md:max-w-80 lg:max-w-96",
   "rounded-xl border border-border-strong",
   "bg-surface",
   "flex items-center",
-  "px-5",
+  "px-3 sm:px-4 md:px-5",
 ].join(" ");
 
 export const projectSelectorTextStyles = "text-xs font-semibold text-foreground-muted truncate";

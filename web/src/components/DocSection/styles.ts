@@ -1,1 +1,1 @@
-export const containerStyles = "flex gap-4";
+export const containerStyles = "flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4";

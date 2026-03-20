@@ -8,8 +8,8 @@ import DocsDemo from "@/components/DocsDemo";
 
 export default function Home() {
   return (
-    <div className="flex h-screen flex-col bg-background font-sans">
-      <main className="mx-auto flex min-h-0 w-full max-w-[1600px] flex-1 flex-col gap-5 px-10 py-4">
+    <div className="flex h-screen flex-col overflow-hidden bg-background font-sans">
+      <main className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col gap-3 overflow-x-hidden px-3 py-3 sm:gap-4 sm:px-4 sm:py-4 md:gap-5 md:px-6 lg:px-10">
         <Topbar
           projectLabel="Projeto: Cliente X * Billing API"
           statusLabel="Indexado"

@@ -5,33 +5,33 @@
   --background: #F2F2F2;
   --surface: #FFFFFF;
   --subtle: rgba(0, 0, 0, 0.03);
-  
+
   /* Foreground */
   --foreground: #000000;
   --foreground-muted: #333333;
-  
+
   /* Border */
   --border: rgba(0, 0, 0, 0.10);
   --border-strong: rgba(0, 0, 0, 0.12);
-  
+
   /* Brand - Avanade Orange */
   --brand: #FF5800;
   --brand-hover: #E65000;
   --brand-text: #FFFFFF;
   --brand-subtle: rgba(255, 88, 0, 0.10);
   --brand-subtle-border: rgba(255, 88, 0, 0.35);
-  
+
   /* Status */
   --success: #10B981;
   --success-subtle: rgba(16, 185, 129, 0.12);
   --success-border: rgba(16, 185, 129, 0.40);
   --success-text: #065F46;
-  
+
   --warning: #F59E0B;
   --warning-subtle: rgba(245, 158, 11, 0.14);
   --warning-border: rgba(245, 158, 11, 0.45);
   --warning-text: #92400E;
-  
+
   --info: #3B82F6;
   --info-subtle: rgba(59, 130, 246, 0.10);
   --info-border: rgba(59, 130, 246, 0.35);
@@ -43,33 +43,33 @@
   --background: #0B0D10;
   --surface: #111418;
   --subtle: rgba(255, 255, 255, 0.04);
-  
+
   /* Foreground */
   --foreground: #FFFFFF;
   --foreground-muted: rgba(255, 255, 255, 0.72);
-  
+
   /* Border */
   --border: rgba(255, 255, 255, 0.10);
   --border-strong: rgba(255, 255, 255, 0.14);
-  
+
   /* Brand - Avanade Orange */
   --brand: #FF5800;
   --brand-hover: #E65000;
   --brand-text: #111418;
   --brand-subtle: rgba(255, 88, 0, 0.18);
   --brand-subtle-border: rgba(255, 88, 0, 0.60);
-  
+
   /* Status */
   --success: #10B981;
   --success-subtle: rgba(16, 185, 129, 0.16);
   --success-border: rgba(16, 185, 129, 0.55);
   --success-text: #A7F3D0;
-  
+
   --warning: #F59E0B;
   --warning-subtle: rgba(245, 158, 11, 0.18);
   --warning-border: rgba(245, 158, 11, 0.60);
   --warning-text: #FDE68A;
-  
+
   --info: #3B82F6;
   --info-subtle: rgba(59, 130, 246, 0.16);
   --info-border: rgba(59, 130, 246, 0.55);
@@ -77,6 +77,11 @@
 }
 
 @theme inline {
+  /* Breakpoints */
+  --breakpoint-sm: 390px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1280px;
+
   /* Colors */
   --color-background: var(--background);
   --color-surface: var(--surface);
@@ -85,30 +90,30 @@
   --color-foreground-muted: var(--foreground-muted);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
-  
+
   /* Brand */
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
   --color-brand-text: var(--brand-text);
   --color-brand-subtle: var(--brand-subtle);
   --color-brand-subtle-border: var(--brand-subtle-border);
-  
+
   /* Status */
   --color-success: var(--success);
   --color-success-subtle: var(--success-subtle);
   --color-success-border: var(--success-border);
   --color-success-text: var(--success-text);
-  
+
   --color-warning: var(--warning);
   --color-warning-subtle: var(--warning-subtle);
   --color-warning-border: var(--warning-border);
   --color-warning-text: var(--warning-text);
-  
+
   --color-info: var(--info);
   --color-info-subtle: var(--info-subtle);
   --color-info-border: var(--info-border);
   --color-info-text: var(--info-text);
-  
+
   /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

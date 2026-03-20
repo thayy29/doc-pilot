@@ -33,7 +33,7 @@ export default function DocEditor({
       <div className={titleStyles}>Editor</div>
       <div className={descriptionStyles}>O texto gerado aparece aqui para revisão.</div>
 
-      <div className="flex items-center justify-between">
+      <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <input
           type="text"
           value={value}

@@ -22,8 +22,8 @@ export default function ImportDocsCard({ className = "" }: Props) {
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-3">
-          <Button variant="primary" className="w-28">Upload</Button>
-          <Button variant="ghost" className="w-40" disabled>Conectar Wiki</Button>
+          <Button variant="primary" className="shrink-0">Upload</Button>
+          <Button variant="ghost" className="hidden shrink-0 md:inline-flex" disabled>Conectar Wiki</Button>
         </div>
       </div>
     </Card>

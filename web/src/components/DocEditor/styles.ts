@@ -1,5 +1,5 @@
 export const cardStyles = [
-  "flex-1 rounded-2xl border p-4",
+  "w-full flex-1 rounded-2xl border p-3 sm:p-4",
   "bg-subtle border-border",
 ].join(" ");
 
@@ -14,6 +14,6 @@ export const inputStyles = [
 
 export const actionsStyles = "mt-3 flex items-center gap-2";
 
-export const exportButtonStyles = "h-9 w-24 rounded-xl";
+export const exportButtonStyles = "h-9 shrink-0 rounded-xl px-4";
 
-export const saveButtonStyles = "h-9 w-28 rounded-xl";
+export const saveButtonStyles = "h-9 shrink-0 rounded-xl px-4";
