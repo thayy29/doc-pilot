@@ -1,4 +1,4 @@
-export const cardStyles = "h-16 w-full rounded-xl border border-border bg-subtle p-4";
+export const cardStyles = "w-full rounded-xl border border-border bg-subtle p-3";
 
 export const titleStyles = "text-sm font-black text-foreground";
 

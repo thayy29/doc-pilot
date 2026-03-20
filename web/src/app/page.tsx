@@ -1,15 +1,15 @@
-import Button from "@/components/Button";
 import Card from "@/components/Card";
 import SectionHeader from "@/components/SectionHeader";
 import Topbar from "@/components/Topbar";
 import ImportDocsCard from "@/components/ImportDocsCard";
 import ProjectCard from "@/components/ProjectCard";
 import ChatDemo from "@/components/ChatDemo";
+import DocsDemo from "@/components/DocsDemo";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background font-sans">
-      <main className="mx-auto w-full max-w-[1600px] px-10 pt-7">
+    <div className="flex h-screen flex-col bg-background font-sans">
+      <main className="mx-auto flex min-h-0 w-full max-w-[1600px] flex-1 flex-col gap-5 px-10 py-4">
         <Topbar
           projectLabel="Projeto: Cliente X * Billing API"
           statusLabel="Indexado"
@@ -21,14 +21,13 @@ export default function Home() {
           ]}
           newHref="/projects/new"
         />
-        <Card variant="surface" className="mt-10 w-full p-6">
+        <Card variant="surface" className="w-full p-4">
           <SectionHeader
             title="Projetos"
             subtitle="Escolha o projeto e gerencie importações."
-            right={<Button variant="primary">+ Novo</Button>}
           />
 
-          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
 
             <ProjectCard
               title="Cliente X • Billing API"
@@ -48,6 +47,7 @@ export default function Home() {
           </div>
         </Card>
         <ChatDemo />
+        <DocsDemo />
       </main>
     </div >
   );

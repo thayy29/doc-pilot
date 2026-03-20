@@ -10,7 +10,7 @@ export default function ImportDocsCard({ className = "" }: Props) {
   return (
     <Card
       variant="subtle"
-      className={`flex-1 min-w-0 h-28 p-5 ${className}`}
+      className={`flex-1 min-w-0 p-4 ${className}`}
     >
       <div className="flex h-full flex-nowrap items-center justify-between gap-4">
         <div className="min-w-0">

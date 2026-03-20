@@ -21,7 +21,6 @@ const mockMessages = [
 const mockSources = [
   { id: "1", title: "Runbook • Setup Local", link: "Confluence /page/123" },
   { id: "2", title: "Env Vars", link: "Confluence /page/456" },
-  { id: "3", title: "Troubleshooting", link: "Confluence /page/789" },
 ];
 
 export default function ChatDemo() {
@@ -39,12 +38,12 @@ export default function ChatDemo() {
   };
 
   return (
-    <div className="mt-10 w-full">
+    <div className="flex min-h-0 flex-1 flex-col">
       <SectionHeader
         title="Chat"
         subtitle="Pergunte e receba resposta com fontes."
       />
-      <div className="mt-4">
+      <div className="mt-3 flex min-h-0 flex-1">
         <ChatSection
           messages={messages}
           sources={mockSources}

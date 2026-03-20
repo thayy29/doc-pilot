@@ -1,0 +1,1 @@
+export const containerStyles = "flex gap-4";

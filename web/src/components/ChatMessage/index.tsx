@@ -19,8 +19,10 @@ export default function ChatMessage({
 }: Props) {
   return (
     <div className={`${containerStyles} ${className}`}>
-      <div className={labelStyles}>Conversa</div>
-      <div className={listStyles}>
+      <div className="shrink-0">
+        <div className={labelStyles}>Conversa</div>
+      </div>
+      <div className={`${listStyles} min-h-0 flex-1 overflow-y-auto`}>
         {messages.map((msg) => (
           <ChatBubble
             key={msg.id}

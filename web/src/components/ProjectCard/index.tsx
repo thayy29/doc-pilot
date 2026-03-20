@@ -20,7 +20,7 @@ export default function ProjectCard({ title,
   badgeLabel,
   className = "", }: Props) {
   return (
-    <Card variant="subtle" className={`flex-1 min-w-0 h-28 p-5 ${className}`}>
+    <Card variant="subtle" className={`flex-1 min-w-0 p-4 ${className}`}>
       <div className="flex h-full flex-col justify-between">
         <div>
           <div className="text-sm font-black text-foreground truncate">

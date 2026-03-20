@@ -40,8 +40,8 @@ export default function ChatSection({
   return (
     <div className={`${containerStyles} ${className}`}>
       <div className={chatPanelStyles}>
-        <ChatMessage messages={messages} />
-        <div className="mt-4">
+        <ChatMessage messages={messages} className="min-h-0 flex-1 overflow-y-auto" />
+        <div className="mt-3 shrink-0">
           <ChatInput
             value={inputValue}
             onChange={onInputChange}
@@ -50,7 +50,7 @@ export default function ChatSection({
         </div>
       </div>
       <div className={sourcesPanelStyles}>
-        <SourcesPanel sources={sources} />
+        <SourcesPanel sources={sources} className="min-h-0 flex-1" />
       </div>
     </div>
   );
