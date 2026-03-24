@@ -19,14 +19,22 @@ type Anchor = {
   active?: boolean;
   href: string;
 };
+
 type Props = {
   projectLabel: string;
   statusLabel: string;
   anchors: Anchor[];
-  newHref: string;
+  newHref?: string;
+  onNewClick?: () => void;
 };
 
-export default function Topbar({ projectLabel, statusLabel, anchors, newHref }: Props) {
+export default function Topbar({
+  projectLabel,
+  statusLabel,
+  anchors,
+  newHref,
+  onNewClick,
+}: Props) {
   return (
     <div className={containerStyles}>
       <div className="flex items-center">
@@ -55,10 +63,21 @@ export default function Topbar({ projectLabel, statusLabel, anchors, newHref }: 
       </div>
       <div className="ml-auto flex items-center gap-2 sm:gap-3">
         <ThemeToggle />
-        <Link href={newHref} className={ctaStyles}>
-          <span className="hidden sm:inline">+ Novo</span>
-          <span className="sm:hidden">+</span>
-        </Link>
+        {/* Usar button se onNewClick for fornecido, senão usar Link */}
+        {onNewClick ? (
+          <button
+            onClick={onNewClick}
+            className={ctaStyles}
+          >
+            <span className="hidden sm:inline">+ Novo</span>
+            <span className="sm:hidden">+</span>
+          </button>
+        ) : (
+          <Link href={newHref || "#"} className={ctaStyles}>
+            <span className="hidden sm:inline">+ Novo</span>
+            <span className="sm:hidden">+</span>
+          </Link>
+        )}
       </div>
     </div>
   );
