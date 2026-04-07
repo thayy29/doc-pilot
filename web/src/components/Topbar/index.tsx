@@ -11,6 +11,7 @@ import {
   ctaStyles,
 } from "./styles";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import ThemeToggle from "../ThemeToggle";
 
 type Anchor = {
@@ -26,6 +27,7 @@ type Props = {
   anchors: Anchor[];
   newHref?: string;
   onNewClick?: () => void;
+  rightSlot?: ReactNode;
 };
 
 export default function Topbar({
@@ -34,6 +36,7 @@ export default function Topbar({
   anchors,
   newHref,
   onNewClick,
+  rightSlot,
 }: Props) {
   return (
     <div className={containerStyles}>
@@ -62,6 +65,7 @@ export default function Topbar({
         ))}
       </div>
       <div className="ml-auto flex items-center gap-2 sm:gap-3">
+        {rightSlot}
         <ThemeToggle />
         {/* Usar button se onNewClick for fornecido, senão usar Link */}
         {onNewClick ? (

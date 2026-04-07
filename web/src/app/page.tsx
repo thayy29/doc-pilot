@@ -8,6 +8,7 @@ import ProjectList from "@/components/ProjectList";
 import NewProjectModal from "@/components/NewProjectModal";
 import ChatDemo from "@/components/ChatDemo";
 import DocsDemo from "@/components/DocsDemo";
+import AuthUserMenu from "@/components/AuthUserMenu";
 import { useProjects } from "@/hooks/useProjects";
 
 export default function Home() {
@@ -33,6 +34,7 @@ export default function Home() {
           ]}
           newHref="#"
           onNewClick={() => setIsModalOpen(true)}
+          rightSlot={<AuthUserMenu />}
         />
         <Card variant="surface" className="w-full p-4">
           <SectionHeader

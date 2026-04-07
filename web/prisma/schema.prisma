@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DocumentStatus {
+  PENDING
+  PROCESSING
+  READY
+  FAILED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  projects      Project[]
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Project {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  ownerId     String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  documents   Document[]
+
+  @@index([ownerId])
+  @@map("projects")
+}
+
+model Document {
+  id        String         @id @default(cuid())
+  projectId String
+  title     String
+  fileName  String
+  mimeType  String?
+  status    DocumentStatus @default(PENDING)
+  sourceUrl String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  project   Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  chunks    Chunk[]
+
+  @@index([projectId])
+  @@index([status])
+  @@map("documents")
+}
+
+model Chunk {
+  id         String     @id @default(cuid())
+  documentId String
+  position   Int
+  content    String     @db.Text
+  tokenCount Int?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  document   Document   @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  embedding  Embedding?
+
+  @@unique([documentId, position])
+  @@index([documentId])
+  @@map("chunks")
+}
+
+model Embedding {
+  id         String                @id @default(cuid())
+  chunkId    String                @unique
+  vector     Unsupported("vector")
+  dimensions Int                   @default(1536)
+  provider   String
+  model      String
+  createdAt  DateTime              @default(now())
+  updatedAt  DateTime              @updatedAt
+  chunk      Chunk                 @relation(fields: [chunkId], references: [id], onDelete: Cascade)
+
+  @@index([model])
+  @@map("embeddings")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
