@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
+/**
+ * Health check endpoint para validar conectividade do banco.
+ * GET /api/health/db
+ */
 export async function GET() {
   try {
     await prisma.$queryRaw`SELECT 1`;
-
     return NextResponse.json(
       { ok: true, message: "Database connection is healthy" },
       { status: 200 },
@@ -22,3 +25,4 @@ export async function GET() {
     );
   }
 }
+

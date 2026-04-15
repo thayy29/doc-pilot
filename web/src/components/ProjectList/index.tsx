@@ -59,7 +59,7 @@ export default function ProjectList({ className = "" }: Props) {
                   {project.name}
                 </div>
                 <div className="mt-1 text-xs font-semibold text-foreground-muted">
-                  Atualizado: {formatDate(project.updatedAt)}
+                  Atualizado: {formatDate(new Date(project.updatedAt))}
                 </div>
               </div>
               <div className="flex items-center justify-between mt-4">
