@@ -20,6 +20,7 @@ export default function ChatWindow({ projectId }: Props) {
     createSession,
     deleteSession,
     selectSession,
+    loadSessions,
   } = useChatSessions(projectId);
 
   const [inputValue, setInputValue] = useState("");
@@ -42,6 +43,10 @@ export default function ChatWindow({ projectId }: Props) {
   const { messages, isStreaming, sendMessage, clearMessages, loadMessages } = useChatStream({
     sessionId: activeSessionId,
     projectId,
+    onDone: () => {
+      // Recarrega sessões para atualizar título e contagem de mensagens
+      loadSessions();
+    },
   });
 
   // Carrega mensagens da sessão ativa ao montar ou quando a sessão muda
@@ -86,13 +91,20 @@ export default function ChatWindow({ projectId }: Props) {
 
   return (
     <div className="flex min-h-0 flex-1 gap-3">
-      {/* Sidebar de sessões */}
-      {visibleSessions.length > 1 && (
-        <div className="hidden w-48 shrink-0 flex-col gap-1 overflow-y-auto md:flex">
-          <div className="mb-1 text-xs font-black text-foreground-muted uppercase tracking-wide">
+      {/* Sidebar de sessões — sempre visível */}
+      <div className="flex w-48 shrink-0 flex-col gap-1 overflow-y-auto border-r border-border pr-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-black text-foreground-muted uppercase tracking-wide">
             Conversas
-          </div>
-          {visibleSessions.map((session) => (
+          </span>
+          <Button variant="ghost" className="text-xs px-2 py-1" onClick={handleNewSession}>
+            +
+          </Button>
+        </div>
+        {visibleSessions.length === 0 && (
+          <p className="text-xs text-foreground-muted">Nenhuma conversa ainda.</p>
+        )}
+        {visibleSessions.map((session) => (
             <button
               key={session.id}
               onClick={() => {
@@ -129,7 +141,6 @@ export default function ChatWindow({ projectId }: Props) {
             </button>
           ))}
         </div>
-      )}
 
       {/* Painel principal */}
       <div className="flex min-h-0 flex-1 flex-col gap-3">
@@ -141,9 +152,6 @@ export default function ChatWindow({ projectId }: Props) {
               <span className="ml-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand align-middle" />
             )}
           </div>
-          <Button variant="ghost" className="text-xs" onClick={handleNewSession}>
-            + Nova conversa
-          </Button>
         </div>
 
         {/* Mensagens */}

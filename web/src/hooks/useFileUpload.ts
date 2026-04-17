@@ -69,6 +69,18 @@ const ACCEPTED_INPUT = SUPPORTED_EXTENSIONS.join(",");
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 
+// Arquivos gerados/lock que não têm valor para indexação
+const IGNORED_FILES = [
+  "package-lock.json",
+  "yarn.lock",
+  "pnpm-lock.yaml",
+  "composer.lock",
+  "Gemfile.lock",
+  "Cargo.lock",
+  "poetry.lock",
+  ".DS_Store",
+];
+
 // ─── Hook ───────────────────────────────────────────────────────────────────
 
 /**
@@ -104,7 +116,17 @@ export function useFileUpload({
   const upload = useCallback(
     async (file: File, title?: string) => {
       // Validação client-side antes de enviar
-      const ext = "." + file.name.split(".").pop()?.toLowerCase();
+      const fileName = file.name.toLowerCase();
+      const ext = "." + fileName.split(".").pop();
+
+      if (IGNORED_FILES.includes(fileName)) {
+        const msg = `"${file.name}" é um arquivo gerado/lock e não é útil para indexação.`;
+        setError(msg);
+        setStatus("error");
+        onError?.(msg);
+        return;
+      }
+
       if (!SUPPORTED_EXTENSIONS.includes(ext)) {
         const msg = `Formato "${ext}" não suportado. Use: ${SUPPORTED_EXTENSIONS.join(", ")}`;
         setError(msg);
