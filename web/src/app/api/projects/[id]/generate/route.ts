@@ -6,7 +6,6 @@ import { ZodError } from "zod";
 import { requireAuth } from "@/shared/auth";
 import { docGenerationSchema } from "@/shared/validation";
 import { docGenerationService } from "@/server/services";
-import { getAnthropicClient, CLAUDE_MODEL, MAX_TOKENS } from "@/lib/anthropic";
 import { AppError } from "@/shared/errors";
 import { fail, ok } from "@/shared/http";
 import { listTemplates, type DocTemplate } from "@/lib/docTemplates";
@@ -93,6 +92,17 @@ export async function POST(
         controller.enqueue(encodeSSE(event, data));
 
       try {
+        // Detecta LLM disponível
+        const hasAnthropic = !!process.env.ANTHROPIC_API_KEY;
+        const hasOpenAI = !!process.env.OPENAI_API_KEY;
+        if (!hasAnthropic && !hasOpenAI) {
+          send("error", {
+            code: "NO_LLM_CONFIGURED",
+            message: "Configure ANTHROPIC_API_KEY ou OPENAI_API_KEY no .env.",
+          });
+          return;
+        }
+
         // Monta contexto: RAG + prompts do template
         const context = await docGenerationService.buildGenerationContext(
           projectId,
@@ -103,45 +113,73 @@ export async function POST(
           similarityThreshold,
         );
 
+        const modelName = hasAnthropic
+          ? (process.env.ANTHROPIC_MODEL ?? "claude-3-5-sonnet-20241022")
+          : (process.env.OPENAI_CHAT_MODEL ?? "gpt-4o-mini");
+
         send("start", {
           templateId,
           templateLabel: context.template.label,
           contextChunks: context.chunks.length,
-          model: CLAUDE_MODEL,
+          model: modelName,
         });
 
-        // Geração com Claude
-        const anthropic = getAnthropicClient();
         let fullContent = "";
-        let inputTokens = 0;
-        let outputTokens = 0;
+        let totalTokens = 0;
 
-        const claudeStream = await anthropic.messages.create({
-          model: CLAUDE_MODEL,
-          max_tokens: MAX_TOKENS,
-          system: context.systemPrompt,
-          messages: [{ role: "user", content: context.userPrompt }],
-          stream: true,
-        });
+        if (hasAnthropic) {
+          const { getAnthropicClient, CLAUDE_MODEL, MAX_TOKENS } =
+            await import("@/lib/anthropic");
+          const anthropic = getAnthropicClient();
+          let inputTokens = 0;
+          let outputTokens = 0;
 
-        for await (const event of claudeStream) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            fullContent += event.delta.text;
-            send("chunk", { text: event.delta.text });
+          const claudeStream = await anthropic.messages.create({
+            model: CLAUDE_MODEL,
+            max_tokens: MAX_TOKENS,
+            system: context.systemPrompt,
+            messages: [{ role: "user", content: context.userPrompt }],
+            stream: true,
+          });
+
+          for await (const event of claudeStream) {
+            if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
+              fullContent += event.delta.text;
+              send("chunk", { text: event.delta.text });
+            }
+            if (event.type === "message_start") {
+              inputTokens = event.message.usage.input_tokens;
+            }
+            if (event.type === "message_delta" && event.usage) {
+              outputTokens = event.usage.output_tokens;
+            }
           }
-          if (event.type === "message_start") {
-            inputTokens = event.message.usage.input_tokens;
-          }
-          if (event.type === "message_delta" && event.usage) {
-            outputTokens = event.usage.output_tokens;
+          totalTokens = inputTokens + outputTokens;
+        } else {
+          const { OpenAI } = await import("openai");
+          const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+          const openaiStream = await openai.chat.completions.create({
+            model: process.env.OPENAI_CHAT_MODEL ?? "gpt-4o-mini",
+            max_tokens: Number(process.env.OPENAI_MAX_TOKENS ?? "2048"),
+            messages: [
+              { role: "system", content: context.systemPrompt },
+              { role: "user", content: context.userPrompt },
+            ],
+            stream: true,
+          });
+
+          for await (const chunk of openaiStream) {
+            const delta = chunk.choices[0]?.delta?.content;
+            if (delta) {
+              fullContent += delta;
+              send("chunk", { text: delta });
+            }
           }
         }
 
         send("done", {
-          totalTokens: inputTokens + outputTokens,
+          totalTokens,
           contentLength: fullContent.length,
         });
       } catch (error) {

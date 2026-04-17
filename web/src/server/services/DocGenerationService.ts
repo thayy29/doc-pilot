@@ -4,6 +4,7 @@ import { projectRepository } from "@/repositories";
 import { getTemplate, type DocTemplate, type TemplateDefinition } from "@/lib/docTemplates";
 import { ForbiddenError, NotFoundError } from "@/shared/errors";
 import type { SimilarChunk } from "@/repositories";
+import { prisma } from "@/lib/prisma";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -44,11 +45,35 @@ export class DocGenerationService {
       ? `${template.ragQuery}. ${userContext}`
       : template.ragQuery;
 
-    const [queryVector] = await getEmbeddings([ragQuery]);
+    let chunks: SimilarChunk[] = [];
 
-    const chunks = queryVector?.length
-      ? await embeddingRepository.findSimilarChunks(queryVector, projectId, topK, threshold)
-      : [];
+    if (process.env.OPENAI_API_KEY) {
+      try {
+        const [queryVector] = await getEmbeddings([ragQuery]);
+        if (queryVector?.length) {
+          chunks = await embeddingRepository.findSimilarChunks(queryVector, projectId, topK, threshold);
+        }
+      } catch {
+        // Fallback abaixo
+      }
+    }
+
+    // Fallback: carrega chunks direto do banco
+    if (chunks.length === 0) {
+      const rows = await prisma.chunk.findMany({
+        where: { document: { projectId, status: "READY" } },
+        orderBy: { position: "asc" },
+        take: topK,
+        select: { id: true, documentId: true, content: true, position: true },
+      });
+      chunks = rows.map((r) => ({
+        chunkId: r.id,
+        documentId: r.documentId,
+        content: r.content,
+        position: r.position,
+        similarity: 1.0,
+      }));
+    }
 
     // 4. Monta os prompts com contexto injetado
     const systemPrompt = this.buildSystemPrompt(template, project.name, chunks);

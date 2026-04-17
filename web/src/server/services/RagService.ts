@@ -1,5 +1,6 @@
 import { getEmbeddings } from "@/lib/openai";
 import { embeddingRepository, type SimilarChunk } from "@/repositories";
+import { prisma } from "@/lib/prisma";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -26,12 +27,10 @@ Diretrizes:
 
 export class RagService {
   /**
-   * Executa o pipeline RAG completo:
-   * 1. Gera embedding da query do usuário
-   * 2. Busca chunks semanticamente similares no projeto
+   * Executa o pipeline RAG:
+   * 1. Se OPENAI_API_KEY disponível → busca vetorial semântica (embeddings)
+   * 2. Se não → fallback: carrega chunks diretamente do banco de dados
    * 3. Monta o system prompt com o contexto encontrado
-   *
-   * @returns Contexto RAG com chunks e prompt pronto para o LLM
    */
   async buildContext(
     query: string,
@@ -39,25 +38,69 @@ export class RagService {
     topK = 5,
     threshold = 0.7,
   ): Promise<RagContext> {
-    // 1. Gera embedding da query
-    const [queryVector] = await getEmbeddings([query]);
+    let chunks: SimilarChunk[];
 
-    if (!queryVector || queryVector.length === 0) {
-      return { chunks: [], systemPrompt: BASE_SYSTEM_PROMPT };
+    const hasOpenAI = !!process.env.OPENAI_API_KEY;
+
+    if (hasOpenAI) {
+      // Pipeline completo: embedding da query → busca vetorial
+      try {
+        const [queryVector] = await getEmbeddings([query]);
+        if (!queryVector || queryVector.length === 0) {
+          chunks = [];
+        } else {
+          chunks = await embeddingRepository.findSimilarChunks(
+            queryVector,
+            projectId,
+            topK,
+            threshold,
+          );
+        }
+      } catch (err) {
+        console.warn("[RagService] Falha na busca vetorial, usando fallback:", err instanceof Error ? err.message : err);
+        chunks = await this.loadChunksFallback(projectId, topK);
+      }
+    } else {
+      // Fallback: carrega chunks direto do banco (sem busca semântica)
+      chunks = await this.loadChunksFallback(projectId, topK);
     }
 
-    // 2. Busca chunks similares via pgvector
-    const chunks = await embeddingRepository.findSimilarChunks(
-      queryVector,
-      projectId,
-      topK,
-      threshold,
-    );
-
-    // 3. Monta prompt contextualizado
     const systemPrompt = this.buildSystemPrompt(chunks);
-
     return { chunks, systemPrompt };
+  }
+
+  /**
+   * Fallback: carrega os primeiros chunks de documentos READY do projeto.
+   * Usado quando OPENAI_API_KEY não está configurada ou a busca vetorial falha.
+   */
+  private async loadChunksFallback(
+    projectId: string,
+    limit: number,
+  ): Promise<SimilarChunk[]> {
+    const rows = await prisma.chunk.findMany({
+      where: {
+        document: {
+          projectId,
+          status: "READY",
+        },
+      },
+      orderBy: { position: "asc" },
+      take: limit,
+      select: {
+        id: true,
+        documentId: true,
+        content: true,
+        position: true,
+      },
+    });
+
+    return rows.map((r) => ({
+      chunkId: r.id,
+      documentId: r.documentId,
+      content: r.content,
+      position: r.position,
+      similarity: 1.0, // fallback — sem score real
+    }));
   }
 
   /**

@@ -5,11 +5,20 @@ import { type NextRequest } from "next/server";
 import { requireAuth } from "@/shared/auth";
 import { chatStreamSchema } from "@/shared/validation";
 import { chatService, ragService } from "@/server/services";
-import { getAnthropicClient, CLAUDE_MODEL, MAX_TOKENS } from "@/lib/anthropic";
 import { BadRequestError, NotFoundError } from "@/shared/errors";
 import { fail } from "@/shared/http";
 import { ZodError } from "zod";
 import { AppError } from "@/shared/errors";
+
+// ─── LLM Provider Detection ───────────────────────────────────────────────
+
+type LLMProvider = "anthropic" | "openai";
+
+function detectLLMProvider(): LLMProvider | null {
+  if (process.env.ANTHROPIC_API_KEY) return "anthropic";
+  if (process.env.OPENAI_API_KEY) return "openai";
+  return null;
+}
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
@@ -88,6 +97,17 @@ export async function POST(request: NextRequest) {
       };
 
       try {
+        // ── Detecta LLM disponível ─────────────────────────────────────
+        const provider = detectLLMProvider();
+        if (!provider) {
+          send("error", {
+            code: "NO_LLM_CONFIGURED",
+            message:
+              "Nenhuma API de IA configurada. Adicione ANTHROPIC_API_KEY ou OPENAI_API_KEY no .env.",
+          });
+          return;
+        }
+
         // ── RAG: embedding → search → context ──────────────────────────
         const ragContext = await ragService.buildContext(
           message,
@@ -96,9 +116,14 @@ export async function POST(request: NextRequest) {
           similarityThreshold,
         );
 
+        const modelName =
+          provider === "anthropic"
+            ? (process.env.ANTHROPIC_MODEL ?? "claude-3-5-sonnet-20241022")
+            : (process.env.OPENAI_CHAT_MODEL ?? "gpt-4o-mini");
+
         send("start", {
           sessionId,
-          model: CLAUDE_MODEL,
+          model: modelName,
           contextSize: ragContext.chunks.length,
         });
 
@@ -106,50 +131,79 @@ export async function POST(request: NextRequest) {
         const history = await chatService.listMessages(sessionId, user.id);
         const recentMessages = history.slice(-10);
 
-        const anthropicMessages = recentMessages
+        const chatMessages = recentMessages
           .filter((m) => m.role !== "SYSTEM")
           .map((m) => ({
             role: m.role === "USER" ? ("user" as const) : ("assistant" as const),
             content: m.content,
           }));
 
-        // A mensagem atual ainda não está em anthropicMessages (acabou de ser salva)
-        // — já está incluída pois listMessages retorna todas incluindo a recém-salva
-
-        // ── Stream Anthropic ───────────────────────────────────────────
-        const anthropic = getAnthropicClient();
         let fullContent = "";
-        let inputTokens = 0;
-        let outputTokens = 0;
+        let totalTokens = 0;
 
-        const claudeStream = await anthropic.messages.create({
-          model: CLAUDE_MODEL,
-          max_tokens: MAX_TOKENS,
-          system: ragContext.systemPrompt,
-          messages: anthropicMessages,
-          stream: true,
-        });
+        // ── Stream via provider selecionado ─────────────────────────────
+        if (provider === "anthropic") {
+          const { getAnthropicClient, CLAUDE_MODEL, MAX_TOKENS } =
+            await import("@/lib/anthropic");
+          const anthropic = getAnthropicClient();
+          let inputTokens = 0;
+          let outputTokens = 0;
 
-        for await (const event of claudeStream) {
-          if (event.type === "content_block_delta") {
-            const delta = event.delta;
-            if (delta.type === "text_delta") {
-              fullContent += delta.text;
-              send("chunk", { text: delta.text });
+          const claudeStream = await anthropic.messages.create({
+            model: CLAUDE_MODEL,
+            max_tokens: MAX_TOKENS,
+            system: ragContext.systemPrompt,
+            messages: chatMessages,
+            stream: true,
+          });
+
+          for await (const event of claudeStream) {
+            if (event.type === "content_block_delta") {
+              const delta = event.delta;
+              if (delta.type === "text_delta") {
+                fullContent += delta.text;
+                send("chunk", { text: delta.text });
+              }
+            }
+            if (event.type === "message_delta" && event.usage) {
+              outputTokens = event.usage.output_tokens;
+            }
+            if (event.type === "message_start" && event.message.usage) {
+              inputTokens = event.message.usage.input_tokens;
             }
           }
 
-          if (event.type === "message_delta" && event.usage) {
-            outputTokens = event.usage.output_tokens;
-          }
+          totalTokens = inputTokens + outputTokens;
+        } else {
+          // OpenAI Chat fallback (streaming)
+          const { OpenAI } = await import("openai");
+          const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-          if (event.type === "message_start" && event.message.usage) {
-            inputTokens = event.message.usage.input_tokens;
+          const openaiStream = await openai.chat.completions.create({
+            model: process.env.OPENAI_CHAT_MODEL ?? "gpt-4o-mini",
+            max_tokens: Number(process.env.OPENAI_MAX_TOKENS ?? "2048"),
+            messages: [
+              { role: "system", content: ragContext.systemPrompt },
+              ...chatMessages,
+            ],
+            stream: true,
+          });
+
+          for await (const chunk of openaiStream) {
+            const delta = chunk.choices[0]?.delta?.content;
+            if (delta) {
+              fullContent += delta;
+              send("chunk", { text: delta });
+            }
+            if (chunk.usage) {
+              totalTokens =
+                (chunk.usage.prompt_tokens ?? 0) +
+                (chunk.usage.completion_tokens ?? 0);
+            }
           }
         }
 
         // ── Persiste resposta do assistente ────────────────────────────
-        const totalTokens = inputTokens + outputTokens;
         const assistantMessage = await chatService.addAssistantMessage(
           sessionId,
           fullContent,
