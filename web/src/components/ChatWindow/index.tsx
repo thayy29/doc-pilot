@@ -170,7 +170,9 @@ export default function ChatWindow({ projectId }: Props) {
             </div>
           ) : (
             <div className="space-y-3 pb-2">
-              {messages.map((msg) => (
+              {messages
+                .filter((msg) => msg.role === "user" || msg.content !== "")
+                .map((msg) => (
                 <ChatBubble
                   key={msg.id}
                   variant={msg.role === "user" ? "user" : "assistant"}

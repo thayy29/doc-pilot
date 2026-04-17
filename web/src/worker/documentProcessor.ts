@@ -105,13 +105,19 @@ async function generateEmbeddings(
       })
     : new OpenAI({ apiKey });
 
+  // Limita cada texto a ~8000 tokens (~32k chars) para evitar 413
+  const MAX_EMBED_CHARS = 30_000;
+  const safeTexts = texts.map((t) =>
+    t.length > MAX_EMBED_CHARS ? t.slice(0, MAX_EMBED_CHARS) : t,
+  );
+
   const batchSize = 20;
   const allEmbeddings: number[][] = [];
 
-  for (let i = 0; i < texts.length; i += batchSize) {
-    const batch = texts.slice(i, i + batchSize);
+  for (let i = 0; i < safeTexts.length; i += batchSize) {
+    const batch = safeTexts.slice(i, i + batchSize);
     console.log(
-      `  📐 Embedding batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(texts.length / batchSize)}...`,
+      `  📐 Embedding batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(safeTexts.length / batchSize)}...`,
     );
 
     const response = await openai.embeddings.create({
