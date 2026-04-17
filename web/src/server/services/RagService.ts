@@ -35,14 +35,14 @@ export class RagService {
   async buildContext(
     query: string,
     projectId: string,
-    topK = 5,
-    threshold = 0.7,
+    topK = 10,
+    threshold = 0.3,
   ): Promise<RagContext> {
     let chunks: SimilarChunk[];
 
-    const hasOpenAI = !!process.env.OPENAI_API_KEY;
+    const hasEmbeddingKey = !!process.env.OPENAI_API_KEY || !!process.env.GITHUB_TOKEN;
 
-    if (hasOpenAI) {
+    if (hasEmbeddingKey) {
       // Pipeline completo: embedding da query → busca vetorial
       try {
         const [queryVector] = await getEmbeddings([query]);
