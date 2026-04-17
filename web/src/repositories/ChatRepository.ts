@@ -47,6 +47,7 @@ export class ChatSessionRepository implements IchatSessionRepository {
     return prisma.chatSession.findMany({
       where: { projectId, userId },
       orderBy: { updatedAt: "desc" },
+      include: { _count: { select: { messages: true } } },
     });
   }
 

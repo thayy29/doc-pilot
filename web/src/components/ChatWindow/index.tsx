@@ -77,15 +77,22 @@ export default function ChatWindow({ projectId }: Props) {
     );
   }
 
+  // Filtra: mostra apenas sessões com mensagens + a sessão ativa
+  const visibleSessions = sessions.filter(
+    (s) =>
+      s.id === activeSession?.id ||
+      ((s as unknown as { _count?: { messages: number } })._count?.messages ?? 0) > 0,
+  );
+
   return (
     <div className="flex min-h-0 flex-1 gap-3">
       {/* Sidebar de sessões */}
-      {sessions.length > 1 && (
+      {visibleSessions.length > 1 && (
         <div className="hidden w-48 shrink-0 flex-col gap-1 overflow-y-auto md:flex">
           <div className="mb-1 text-xs font-black text-foreground-muted uppercase tracking-wide">
             Conversas
           </div>
-          {sessions.map((session) => (
+          {visibleSessions.map((session) => (
             <button
               key={session.id}
               onClick={() => {

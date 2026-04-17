@@ -6,6 +6,7 @@ import {
   type ChatSessionRecord,
 } from "@/repositories";
 import { ForbiddenError, NotFoundError } from "@/shared/errors";
+import { prisma } from "@/lib/prisma";
 
 export class ChatService {
   /**
@@ -79,6 +80,15 @@ export class ChatService {
     const session = await chatSessionRepository.findById(sessionId, requesterId);
     if (!session) throw new NotFoundError("ChatSession");
     if (session.userId !== requesterId) throw new ForbiddenError();
+
+    // Auto-rename: se a sessão ainda tem o título padrão, usa a primeira mensagem
+    if (session.title === "Nova conversa") {
+      const title = content.trim().slice(0, 50) + (content.length > 50 ? "…" : "");
+      await prisma.chatSession.update({
+        where: { id: sessionId },
+        data: { title },
+      });
+    }
 
     return chatSessionRepository.addMessage(sessionId, "USER", content);
   }
