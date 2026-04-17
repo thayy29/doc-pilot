@@ -78,25 +78,32 @@ export function chunkText(
 // ─── Embeddings ────────────────────────────────────────────────────────────
 
 /**
- * Gera embeddings via OpenAI. Retorna null se OPENAI_API_KEY não estiver
- * configurada (graceful degradation para MVP).
+ * Gera embeddings via OpenAI ou GitHub Models.
+ * Retorna null se nenhuma API key estiver configurada (graceful degradation).
  */
 async function generateEmbeddings(
   texts: string[],
 ): Promise<number[][] | null> {
   if (texts.length === 0) return [];
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY || process.env.GITHUB_TOKEN;
   if (!apiKey) {
     console.warn(
-      "[documentProcessor] OPENAI_API_KEY não configurada — pulando embeddings.",
+      "[documentProcessor] OPENAI_API_KEY/GITHUB_TOKEN não configurada — pulando embeddings.",
     );
     return null;
   }
 
+  const useGitHub = !process.env.OPENAI_API_KEY && !!process.env.GITHUB_TOKEN;
+
   // Import dinâmico para não falhar se openai não estiver configurado
   const { default: OpenAI } = await import("openai");
-  const openai = new OpenAI({ apiKey });
+  const openai = useGitHub
+    ? new OpenAI({
+        baseURL: "https://models.inference.ai.azure.com",
+        apiKey,
+      })
+    : new OpenAI({ apiKey });
 
   const batchSize = 20;
   const allEmbeddings: number[][] = [];

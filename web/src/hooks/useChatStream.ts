@@ -46,6 +46,7 @@ export interface UseChatStreamReturn {
   sendMessage: (content: string) => Promise<void>;
   clearMessages: () => void;
   abortStream: () => void;
+  loadMessages: (sessionId: string) => Promise<void>;
 }
 
 // ─── Hook ───────────────────────────────────────────────────────────────────
@@ -221,5 +222,27 @@ export function useChatStream({
     [isStreaming, sessionId, projectId, topK, similarityThreshold, onStart, onDone, onError],
   );
 
-  return { messages, isStreaming, sendMessage, clearMessages, abortStream };
+  const loadMessages = useCallback(
+    async (sid: string) => {
+      if (!sid) return;
+      try {
+        const res = await fetch(`/api/chat/sessions/${sid}/messages`);
+        if (!res.ok) return;
+        const json = await res.json();
+        const msgs: ChatMessage[] = (json.data ?? [])
+          .filter((m: { role: string }) => m.role !== "SYSTEM")
+          .map((m: { id: string; role: string; content: string }) => ({
+            id: m.id,
+            role: m.role === "USER" ? "user" : "assistant",
+            content: m.content,
+          }));
+        setMessages(msgs);
+      } catch {
+        setMessages([]);
+      }
+    },
+    [],
+  );
+
+  return { messages, isStreaming, sendMessage, clearMessages, abortStream, loadMessages };
 }

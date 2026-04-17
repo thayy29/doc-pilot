@@ -12,11 +12,12 @@ import { AppError } from "@/shared/errors";
 
 // ─── LLM Provider Detection ───────────────────────────────────────────────
 
-type LLMProvider = "anthropic" | "openai";
+type LLMProvider = "anthropic" | "openai" | "github";
 
 function detectLLMProvider(): LLMProvider | null {
   if (process.env.ANTHROPIC_API_KEY) return "anthropic";
   if (process.env.OPENAI_API_KEY) return "openai";
+  if (process.env.GITHUB_TOKEN) return "github";
   return null;
 }
 
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
           send("error", {
             code: "NO_LLM_CONFIGURED",
             message:
-              "Nenhuma API de IA configurada. Adicione ANTHROPIC_API_KEY ou OPENAI_API_KEY no .env.",
+              "Nenhuma API de IA configurada. Adicione ANTHROPIC_API_KEY, OPENAI_API_KEY ou GITHUB_TOKEN no .env.",
           });
           return;
         }
@@ -175,9 +176,14 @@ export async function POST(request: NextRequest) {
 
           totalTokens = inputTokens + outputTokens;
         } else {
-          // OpenAI Chat fallback (streaming)
+          // OpenAI or GitHub Models (both use OpenAI SDK)
           const { OpenAI } = await import("openai");
-          const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+          const openai = provider === "github"
+            ? new OpenAI({
+                baseURL: "https://models.inference.ai.azure.com",
+                apiKey: process.env.GITHUB_TOKEN,
+              })
+            : new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
           const openaiStream = await openai.chat.completions.create({
             model: process.env.OPENAI_CHAT_MODEL ?? "gpt-4o-mini",

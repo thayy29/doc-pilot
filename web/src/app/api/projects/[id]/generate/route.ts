@@ -95,10 +95,11 @@ export async function POST(
         // Detecta LLM disponível
         const hasAnthropic = !!process.env.ANTHROPIC_API_KEY;
         const hasOpenAI = !!process.env.OPENAI_API_KEY;
-        if (!hasAnthropic && !hasOpenAI) {
+        const hasGitHub = !!process.env.GITHUB_TOKEN;
+        if (!hasAnthropic && !hasOpenAI && !hasGitHub) {
           send("error", {
             code: "NO_LLM_CONFIGURED",
-            message: "Configure ANTHROPIC_API_KEY ou OPENAI_API_KEY no .env.",
+            message: "Configure ANTHROPIC_API_KEY, OPENAI_API_KEY ou GITHUB_TOKEN no .env.",
           });
           return;
         }
@@ -113,7 +114,8 @@ export async function POST(
           similarityThreshold,
         );
 
-        const modelName = hasAnthropic
+        const useAnthropic = hasAnthropic;
+        const modelName = useAnthropic
           ? (process.env.ANTHROPIC_MODEL ?? "claude-3-5-sonnet-20241022")
           : (process.env.OPENAI_CHAT_MODEL ?? "gpt-4o-mini");
 
@@ -127,7 +129,7 @@ export async function POST(
         let fullContent = "";
         let totalTokens = 0;
 
-        if (hasAnthropic) {
+        if (useAnthropic) {
           const { getAnthropicClient, CLAUDE_MODEL, MAX_TOKENS } =
             await import("@/lib/anthropic");
           const anthropic = getAnthropicClient();
@@ -157,7 +159,12 @@ export async function POST(
           totalTokens = inputTokens + outputTokens;
         } else {
           const { OpenAI } = await import("openai");
-          const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+          const openai = hasGitHub
+            ? new OpenAI({
+                baseURL: "https://models.inference.ai.azure.com",
+                apiKey: process.env.GITHUB_TOKEN,
+              })
+            : new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
           const openaiStream = await openai.chat.completions.create({
             model: process.env.OPENAI_CHAT_MODEL ?? "gpt-4o-mini",

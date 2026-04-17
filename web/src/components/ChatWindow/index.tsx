@@ -39,10 +39,17 @@ export default function ChatWindow({ projectId }: Props) {
   // sessionId só é passado quando existe sessão ativa — evita request com string vazia
   const activeSessionId = activeSession?.id ?? "";
 
-  const { messages, isStreaming, sendMessage, clearMessages } = useChatStream({
+  const { messages, isStreaming, sendMessage, clearMessages, loadMessages } = useChatStream({
     sessionId: activeSessionId,
     projectId,
   });
+
+  // Carrega mensagens da sessão ativa ao montar ou quando a sessão muda
+  useEffect(() => {
+    if (activeSessionId) {
+      loadMessages(activeSessionId);
+    }
+  }, [activeSessionId, loadMessages]);
 
   // Auto-scroll para a última mensagem
   useEffect(() => {
@@ -83,7 +90,7 @@ export default function ChatWindow({ projectId }: Props) {
               key={session.id}
               onClick={() => {
                 selectSession(session.id);
-                clearMessages();
+                loadMessages(session.id);
               }}
               className={[
                 "group flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs font-semibold transition-all",
@@ -95,15 +102,23 @@ export default function ChatWindow({ projectId }: Props) {
               <span className="truncate">
                 {session.title ?? "Nova conversa"}
               </span>
-              <button
+              <span
+                role="button"
+                tabIndex={0}
                 onClick={(e) => {
                   e.stopPropagation();
                   deleteSession(session.id);
                 }}
-                className="ml-1 opacity-0 transition-opacity group-hover:opacity-100 text-destructive"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.stopPropagation();
+                    deleteSession(session.id);
+                  }
+                }}
+                className="ml-1 opacity-0 transition-opacity group-hover:opacity-100 text-destructive cursor-pointer"
               >
                 ✕
-              </button>
+              </span>
             </button>
           ))}
         </div>
