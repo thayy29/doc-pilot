@@ -255,5 +255,9 @@ export function getTemplate(id: DocTemplate): TemplateDefinition {
 }
 
 export function listTemplates(): TemplateDefinition[] {
-  return Object.values(TEMPLATE_DEFINITIONS);
+  // MVP: apenas README e API Reference
+  const MVP_TEMPLATES: DocTemplate[] = ["README", "API_REFERENCE"];
+  return Object.values(TEMPLATE_DEFINITIONS).filter((t) =>
+    MVP_TEMPLATES.includes(t.id),
+  );
 }
