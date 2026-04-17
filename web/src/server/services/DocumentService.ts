@@ -15,7 +15,7 @@ import {
   MAX_FILE_SIZE_BYTES,
   parseFile,
 } from "@/lib/parsers";
-import { getDocumentQueue } from "@/lib/documentQueue";
+import { processDocumentInline } from "@/worker/documentProcessor";
 import path from "path";
 
 export interface UploadDocumentInput {
@@ -112,17 +112,14 @@ export class DocumentService {
     // 3. Persiste o texto extraído
     const updatedDoc = await documentRepository.saveContent(document.id, extractedText);
 
-    // 4. Enfileira para geração de embeddings (assíncrono)
-    try {
-      const queue = getDocumentQueue();
-      await queue.add("process", { documentId: document.id });
-    } catch {
-      // Redis pode estar indisponível — log do erro mas não falha o upload
-      console.warn(
-        `[DocumentService] Falha ao enfileirar documento ${document.id}. ` +
-          "Processe manualmente via POST /api/documents/process",
+    // 4. Processa inline: chunking → embeddings → marca READY
+    // Sem dependência de Redis/BullMQ
+    processDocumentInline(document.id).catch((err) => {
+      console.error(
+        `[DocumentService] Falha ao processar documento ${document.id}:`,
+        err instanceof Error ? err.message : err,
       );
-    }
+    });
 
     return updatedDoc;
   }

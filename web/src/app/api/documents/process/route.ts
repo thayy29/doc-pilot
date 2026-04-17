@@ -1,13 +1,13 @@
 import { type NextRequest } from "next/server";
 import { requireAuth } from "@/shared/auth";
 import { ok, fail, handleError } from "@/shared/http";
-import { getDocumentQueue } from "@/lib/documentQueue";
+import { processDocumentInline } from "@/worker/documentProcessor";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * Enfileira documento para processamento assíncrono.
+ * Processa um documento (chunking + embeddings) de forma síncrona.
  * POST /api/documents/process
  * body: { documentId: string }
  */
@@ -20,9 +20,8 @@ export async function POST(req: NextRequest) {
       return fail("BAD_REQUEST", "documentId é obrigatório", 400);
     }
 
-    const queue = getDocumentQueue();
-    await queue.add("process", { documentId });
-    return ok({ queued: true, documentId });
+    const result = await processDocumentInline(documentId);
+    return ok(result);
   } catch (error) {
     return handleError(error);
   }
