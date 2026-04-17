@@ -41,13 +41,18 @@ export class RagService {
     let chunks: SimilarChunk[];
 
     const hasEmbeddingKey = !!process.env.OPENAI_API_KEY || !!process.env.GITHUB_TOKEN;
+    console.log(`[RagService] buildContext — projectId=${projectId}, hasKey=${hasEmbeddingKey}`);
 
     if (hasEmbeddingKey) {
       // Pipeline completo: embedding da query → busca vetorial
       try {
-        const [queryVector] = await getEmbeddings([query]);
+        const embedResult = await getEmbeddings([query]);
+        const queryVector = embedResult?.[0];
+        console.log(`[RagService] Query embedding: ${queryVector ? `${queryVector.length} dims` : "FALHOU"}`);
+
         if (!queryVector || queryVector.length === 0) {
-          chunks = [];
+          console.warn("[RagService] Embedding da query vazio — usando fallback");
+          chunks = await this.loadChunksFallback(projectId, topK);
         } else {
           chunks = await embeddingRepository.findSimilarChunks(
             queryVector,
@@ -55,6 +60,13 @@ export class RagService {
             topK,
             threshold,
           );
+          console.log(`[RagService] Busca vetorial: ${chunks.length} chunks (threshold=${threshold})`);
+
+          // Se busca vetorial não retornou nada, tenta fallback
+          if (chunks.length === 0) {
+            console.warn("[RagService] Busca vetorial vazia — tentando fallback");
+            chunks = await this.loadChunksFallback(projectId, topK);
+          }
         }
       } catch (err) {
         console.warn("[RagService] Falha na busca vetorial, usando fallback:", err instanceof Error ? err.message : err);
@@ -63,6 +75,11 @@ export class RagService {
     } else {
       // Fallback: carrega chunks direto do banco (sem busca semântica)
       chunks = await this.loadChunksFallback(projectId, topK);
+    }
+
+    console.log(`[RagService] Total chunks para contexto: ${chunks.length}`);
+    if (chunks.length > 0) {
+      console.log(`[RagService] Primeiro chunk (${chunks[0].content.length} chars): ${chunks[0].content.substring(0, 100)}...`);
     }
 
     const systemPrompt = this.buildSystemPrompt(chunks);
@@ -77,6 +94,19 @@ export class RagService {
     projectId: string,
     limit: number,
   ): Promise<SimilarChunk[]> {
+    console.log(`[RagService:fallback] Buscando chunks para projeto ${projectId}, limit=${limit}`);
+
+    // Verifica quantos documentos READY existem
+    const docCount = await prisma.document.count({
+      where: { projectId, status: "READY" },
+    });
+    console.log(`[RagService:fallback] Documentos READY: ${docCount}`);
+
+    const chunkCount = await prisma.chunk.count({
+      where: { document: { projectId, status: "READY" } },
+    });
+    console.log(`[RagService:fallback] Chunks disponíveis: ${chunkCount}`);
+
     const rows = await prisma.chunk.findMany({
       where: {
         document: {
