@@ -34,6 +34,7 @@ model User {
   email         String?       @unique
   emailVerified DateTime?
   image         String?
+  password      String? // hash bcrypt — null para usuários OAuth
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   projects      Project[]

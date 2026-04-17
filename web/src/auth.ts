@@ -5,6 +5,8 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
+import { loginSchema } from "@/shared/validation";
+import { authService } from "@/server/services";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -28,43 +30,39 @@ if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
   );
 }
 
-// ─── Dev Credentials Provider ─────────────────────────────────────────────
-// Permite login com qualquer e-mail em desenvolvimento, sem OAuth configurado.
-// NÃO use em produção.
-if (isDev) {
-  providers.push(
-    Credentials({
-      id: "credentials",
-      name: "Dev Login",
-      credentials: {
-        email: { label: "E-mail", type: "email", placeholder: "dev@docpilot.local" },
-        name:  { label: "Nome",  type: "text",  placeholder: "Dev User" },
-      },
-      async authorize(credentials) {
-        const email = (credentials?.email as string | undefined)?.trim().toLowerCase();
-        if (!email) return null;
+// ─── Credentials Provider (e-mail + senha) ────────────────────────────────
+// Funciona em qualquer ambiente. Requer cadastro via POST /api/auth/signup.
+providers.push(
+  Credentials({
+    id: "credentials",
+    name: "E-mail e senha",
+    credentials: {
+      email:    { label: "E-mail",  type: "email"    },
+      password: { label: "Senha",   type: "password" },
+    },
+    async authorize(credentials) {
+      // Valida formato via Zod antes de tocar o banco
+      const parsed = loginSchema.safeParse(credentials);
+      if (!parsed.success) return null;
 
-        const name = ((credentials?.name as string | undefined) ?? "").trim()
-          || email.split("@")[0];
-
-        // Busca ou cria o usuário automaticamente
-        const user = await prisma.user.upsert({
-          where: { email },
-          update: {},
-          create: { email, name },
-        });
-
-        return { id: user.id, email: user.email, name: user.name };
-      },
-    }),
-  );
-}
+      try {
+        const user = await authService.validateCredentials(
+          parsed.data.email,
+          parsed.data.password,
+        );
+        return { id: user.id, name: user.name, email: user.email };
+      } catch {
+        // validateCredentials lança UnauthorizedError — retorna null para o Auth.js
+        return null;
+      }
+    },
+  }),
+);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  // JWT é necessário para o Credentials provider funcionar corretamente
+  // JWT é obrigatório para o Credentials provider funcionar
   session: { strategy: "jwt" },
-  // Fallback de secret para desenvolvimento local — nunca use em produção
   secret: process.env.AUTH_SECRET
     ?? process.env.NEXTAUTH_SECRET
     ?? (isDev ? "dev-secret-docpilot-change-in-production" : undefined),
@@ -82,7 +80,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (isPublicPath) return true;
       return !!auth;
     },
-    // Com estratégia JWT, o id do usuário vem do token
     jwt({ token, user }) {
       if (user?.id) token.sub = user.id;
       return token;
@@ -97,4 +94,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: isDev,
   trustHost: true,
 });
+
 
