@@ -9,6 +9,7 @@ import { parseJson, parseYaml } from "./structuredParser";
 export const SUPPORTED_MIME_TYPES = [
   "application/pdf",
   "text/plain",
+  "text/plain",
   "text/markdown",
   "text/html",
   "application/json",
@@ -21,12 +22,26 @@ export const SUPPORTED_EXTENSIONS = [
   ".pdf",
   ".txt",
   ".md",
+  ".ts",
+  ".js",
+  ".tsx",
+  ".jsx",
+  ".py",
+  ".java",
+  ".go",
+  ".rs",
   ".html",
   ".htm",
   ".json",
   ".yaml",
   ".yml",
+  ".toml",
+  ".xml",
+  ".env",
   ".csv",
+  ".sql",
+  ".sh",
+  ".dockerfile",
 ] as const;
 
 export const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
@@ -73,11 +88,17 @@ export async function parseFile(
     return parseYaml(buffer);
   }
 
-  // Texto plano, Markdown e CSV — tratados igualmente como texto
-  if (
-    [".txt", ".md", ".csv"].includes(ext) ||
-    ["text/plain", "text/markdown", "text/csv"].includes(mimeType ?? "")
-  ) {
+  // Texto plano: código-fonte, configs, markdown, CSV, SQL, scripts
+  const plainTextExts = [
+    ".txt", ".md", ".csv",
+    ".ts", ".js", ".tsx", ".jsx",
+    ".py", ".java", ".go", ".rs",
+    ".toml", ".xml", ".env",
+    ".sql", ".sh", ".dockerfile",
+  ];
+  const plainTextMimes = ["text/plain", "text/markdown", "text/csv"];
+
+  if (plainTextExts.includes(ext) || plainTextMimes.includes(mimeType ?? "")) {
     return parsePlainText(buffer);
   }
 

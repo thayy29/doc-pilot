@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { useDocGeneration } from "@/hooks/useDocGeneration";
 import { listTemplates } from "@/lib/docTemplates";
 import type { DocTemplate } from "@/lib/docTemplates";
@@ -120,11 +121,11 @@ export default function DocGenerator({ projectId }: Props) {
             </Button>
           </div>
           {content && (
-            <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-border bg-subtle p-4">
-              <pre className="whitespace-pre-wrap text-xs font-mono text-foreground leading-relaxed">
-                {content}
-                <span className="inline-block h-4 w-0.5 animate-blink bg-foreground align-middle ml-0.5" />
-              </pre>
+            <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-border bg-subtle p-6">
+              <article className="prose prose-sm prose-neutral dark:prose-invert max-w-none text-foreground">
+                <ReactMarkdown>{content}</ReactMarkdown>
+              </article>
+              <span className="inline-block h-4 w-0.5 animate-blink bg-foreground align-middle ml-0.5" />
             </div>
           )}
         </div>
@@ -156,10 +157,10 @@ export default function DocGenerator({ projectId }: Props) {
           </div>
 
           {/* Preview do conteúdo */}
-          <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-border bg-subtle p-4">
-            <pre className="whitespace-pre-wrap text-xs font-mono text-foreground leading-relaxed">
-              {content}
-            </pre>
+          <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-border bg-subtle p-6">
+            <article className="prose prose-sm prose-neutral dark:prose-invert max-w-none text-foreground">
+              <ReactMarkdown>{content}</ReactMarkdown>
+            </article>
           </div>
         </div>
       )}

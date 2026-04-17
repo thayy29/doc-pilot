@@ -150,7 +150,7 @@ export class DocumentService {
 
   private validateFile(
     fileName: string,
-    mimeType?: string,
+    _mimeType?: string,
     fileSize?: number,
   ): void {
     const ext = path.extname(fileName).toLowerCase() as (typeof SUPPORTED_EXTENSIONS)[number];
@@ -161,9 +161,9 @@ export class DocumentService {
       );
     }
 
-    if (mimeType && !SUPPORTED_MIME_TYPES.includes(mimeType as (typeof SUPPORTED_MIME_TYPES)[number])) {
-      throw new BadRequestError(`MIME type "${mimeType}" não é aceito.`);
-    }
+    // MIME type não é validado — navegadores enviam "application/octet-stream"
+    // para muitas extensões válidas (.md, .ts, .env, .toml, etc.).
+    // A extensão do arquivo já é validada acima e o parseFile usa ela para decidir o parser.
 
     if (fileSize !== undefined && fileSize > MAX_FILE_SIZE_BYTES) {
       throw new BadRequestError(
